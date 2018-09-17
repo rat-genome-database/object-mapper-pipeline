@@ -1,0 +1,63 @@
+Sep 17, 2018 -- ver 2.0.3
+  moved from subversion to github
+
+Feb 19, 2018 -- ver 2.0.2
+  upgraded code to java 8; streamlined logging
+
+Jan 27, 2017 -- ver 2.0.1
+  QTLMapper: separated generation of out-of-region genes to standalone script
+
+Dec 21, 2016 -- ver 2.0
+  updated to use GRADLE instead of ANT
+
+Sep 20, 2016 -- ver 1.2.12
+  StrainMapper: extended mapping of mutant strains to strain types 'mutant_knockin','mutant_knockout'
+
+Jan 27, 2016 -- ver 1.2.11
+  SslpMapper: tuned up logging
+
+Jan 27, 2016 -- ver 1.2.10
+  SslpMapper: new mapper for DB_SNP rat SSLPs
+  QtlMapper: simplified code
+  StrainMapper: simplified code
+
+May 21, 2015 -- ver 1.2.9
+  QtlMapper: improved reporting of unpositionable qtls, esp. for mouse
+
+Apr 27, 2015 -- ver 1.2.8
+  Strain Mapper v.1.2.1: allows positioning of mutant strains
+
+Apr 24, 2015 -- ver 1.2.7
+  Strain Mapper v.1.2.0: allows handling of multiple regions (for double/triple congenic strains)
+
+Dec 08, 2014 -- ver 1.2.6
+  QTL + Strain Mapper: uses the exact chromosome sizes for the purpose of positioning strains and qtls
+    (previously the chromosome size was estimated as the largest stop_pos of genes on the given chromosome)
+
+Sep 24, 2014 -- ver 1.2.5
+  QTL + Strain Mapper: changed src pipeline to 'RGD_MAPPER_PIPELINE' per communication with Rajni and Jennifer
+
+Sep 5, 2014 -- ver 1.2.4
+  QTL + Strain Mapper: added support for Rnor_6.0
+
+Feb 4, 2014 -- ver 1.2.3
+  QTL Mapper v. 1.2:
+  - improved QC (for flanking markers with START_POS=0, STOP_POS=0 positions)
+  - improved logging (not relevant information is no longer logged, to improve log readability)
+
+Aug 2, 2013 -- ver 1.2.2
+  QTL Mapper v. 1.1:
+  - qtl position changes logged to separate file position_changes.log
+      and then emailed to interested parties;
+  - qtls could be positioned on consensus chromosome: if there are multiple markers having positions
+      on multiple chromosomes, the chromosome that is most frequent is chosen as consensus chromosome
+      and marker positions on this consensus chr are used to position the qtl
+
+Jan 22, 2013 -- ver 1.2.1
+  Fixed the confusing messages when processing qtls with obsolete positions.
+
+Dec 7, 2012 -- ver 1.2
+  Migrated QtlMapper from ftpFileExtracts; QTL mapper is setup to update data also for new assemblies for mouse and rat
+
+Nov 20, 2012 -- ver 1.1
+  StrainMapper module extended to compute strain positions on rat assembly maps 5.0 (map_key=70)

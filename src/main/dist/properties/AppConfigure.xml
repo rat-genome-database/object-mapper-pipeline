@@ -2,12 +2,13 @@
 
 <beans>
 	<bean id="manager" class="edu.mcw.rgd.dataload.ObjectMapper.Manager">
-        <property name="version" value="=== ObjectMapper v. 2.0.3 (Sep 17, 2018) ===" />
+        <property name="version" value="=== ObjectMapper v. 2.0.4 (Jan 17, 2019) ===" />
         <property name="dao" ref="dao" />
 	</bean>
 
     <bean id="qtlMapper" class="edu.mcw.rgd.dataload.ObjectMapper.QtlMapper" >
-        <property name="version" value="QtlMapper v. 1.2.7 (Feb 19, 2018)" />
+        <property name="version" value="QtlMapper v. 1.2.8 (Jan 17, 2019)" />
+        <property name="logName" value="qtlMapper" />
         <property name="srcPipeline" value="RGD_MAPPER_PIPELINE" />
         <property name="outOfRegionGenesFileName" value="data/qtlsWithOutOfRegionGenes_{DATE}.txt" />
         <property name="mapKeys">
@@ -31,7 +32,8 @@
     </bean>
 
     <bean id="strainMapper" class="edu.mcw.rgd.dataload.ObjectMapper.StrainMapper" >
-        <property name="version" value="StrainMapper v. 1.2.4 (Feb 19, 2018)" />
+        <property name="version" value="StrainMapper v. 1.2.5 (Jan 17, 2019)" />
+        <property name="logName" value="strainMapper" />
         <property name="srcPipeline" value="RGD_MAPPER_PIPELINE" />
         <property name="mapKeys">
             <map><!-- map keys for maps processed by pipeline -->
@@ -43,7 +45,8 @@
     </bean>
 
     <bean id="sslpMapper" class="edu.mcw.rgd.dataload.ObjectMapper.SslpMapper" >
-        <property name="version" value="SslpMapper v. 1.0.2 (Feb 19, 2018)" />
+        <property name="version" value="SslpMapper v. 1.0.3 (Jan 17, 2019)" />
+        <property name="logName" value="sslpMapper" />
         <property name="srcPipeline" value="RGD_MAPPER_PIPELINE" />
         <property name="mapKeys">
             <map><!-- map keys for maps processed by pipeline -->

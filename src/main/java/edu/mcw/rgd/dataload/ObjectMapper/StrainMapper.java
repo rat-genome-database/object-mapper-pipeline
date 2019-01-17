@@ -4,7 +4,6 @@ import edu.mcw.rgd.datamodel.MapData;
 import edu.mcw.rgd.datamodel.SpeciesType;
 import edu.mcw.rgd.datamodel.Strain;
 import edu.mcw.rgd.process.Utils;
-import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,19 +16,13 @@ import java.util.Map;
  */
 public class StrainMapper extends BaseMapper {
 
-    Logger log = Logger.getLogger("strainMapper");
-
     public void run(int speciesType) throws Exception {
-        log.info(getDao().getConnectionInfo());
-
-        long time0 = System.currentTimeMillis();
 
         // only rat is supported
         if( speciesType!= SpeciesType.RAT ) {
             log.warn("StrainMapper can only be run for rat");
-            System.exit(1);
+            return;
         }
-        log.info(getVersion());
 
         // get list of all strains for given species
         List<Strain> strains = dao.getActiveStrains(speciesType);
@@ -39,7 +32,6 @@ public class StrainMapper extends BaseMapper {
         for( Integer mapKey: getMapKeysForSpecies(speciesType) ) {
             run(strains, mapKey);
         }
-        log.info("OK! - elapsed "+Utils.formatElapsedTime(time0, System.currentTimeMillis()));
     }
 
     public void run(List<Strain> strains, int mapKey) throws Exception {

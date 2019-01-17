@@ -2,29 +2,38 @@ package edu.mcw.rgd.dataload.ObjectMapper;
 
 import edu.mcw.rgd.datamodel.MapData;
 import edu.mcw.rgd.datamodel.SpeciesType;
+import edu.mcw.rgd.datamodel.Strain;
 import edu.mcw.rgd.process.Utils;
 import org.apache.log4j.Logger;
 
 import java.util.*;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtutaj
- * Date: Mar 11, 2011
- * Time: 3:24:34 PM
+ * @author mtutaj
+ * @since Mar 11, 2011
  * base class for all mappers
  */
-public class BaseMapper {
+public abstract class BaseMapper {
 
     DAO dao;
+    Logger log;
     private Map<String,String> mapKeys;
     private String version;
+    private String logName;
     private String srcPipeline;
     private Map<String,String> params;
 
-    public void run(int speciesType) throws Exception {
-        
+    public void start(int speciesType) throws Exception {
+        long time0 = System.currentTimeMillis();
+        log.info(getVersion());
+        log.info(getDao().getConnectionInfo());
+
+        run(speciesType);
+
+        log.info("OK! - elapsed "+Utils.formatElapsedTime(time0, System.currentTimeMillis()));
     }
+
+    abstract public void run(int speciesType) throws Exception;
 
     /**
      * return set of map keys for given species
@@ -125,6 +134,16 @@ public class BaseMapper {
 
     public String getVersion() {
         return version;
+    }
+
+    public String getLogName() {
+        return logName;
+    }
+
+    public void setLogName(String logName) {
+        this.logName = logName;
+
+        log = Logger.getLogger(logName);
     }
 
     public void setSrcPipeline(String srcPipeline) {

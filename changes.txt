@@ -1,3 +1,6 @@
+Jan 17, 2019 -- ver 2.0.4
+  refactored build.gradle; improved logging
+
 Sep 17, 2018 -- ver 2.0.3
   moved from subversion to github
 

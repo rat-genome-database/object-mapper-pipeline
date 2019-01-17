@@ -3,8 +3,6 @@ package edu.mcw.rgd.dataload.ObjectMapper;
 import edu.mcw.rgd.datamodel.MapData;
 import edu.mcw.rgd.datamodel.SSLP;
 import edu.mcw.rgd.datamodel.SpeciesType;
-import edu.mcw.rgd.process.Utils;
-import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,13 +12,8 @@ import java.util.List;
  * analyze rat DB_SNP sslps and recompute their positions for RGSC 3.4, Rnor5.0 and Rnor6.0 assemblies
  */
 public class SslpMapper extends BaseMapper {
-    Logger log = Logger.getLogger("sslpMapper");
 
     public void run(int speciesType) throws Exception {
-        long startTime = System.currentTimeMillis();
-
-        log.info(getDao().getConnectionInfo());
-        log.info(getVersion());
 
         // only rat is supported
         if( speciesType!= SpeciesType.RAT ) {
@@ -37,7 +30,6 @@ public class SslpMapper extends BaseMapper {
         for( Integer mapKey: getMapKeysForSpecies(speciesType) ) {
             run(sslps, mapKey);
         }
-        log.info("OK -- elapsed "+ Utils.formatElapsedTime(startTime, System.currentTimeMillis()));
     }
 
     public void run(List<SSLP> sslps, int mapKey) throws Exception {

@@ -2,7 +2,6 @@ package edu.mcw.rgd.dataload.ObjectMapper;
 
 import edu.mcw.rgd.datamodel.SpeciesType;
 import edu.mcw.rgd.process.Utils;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.core.io.FileSystemResource;
@@ -11,14 +10,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mtutaj
- * Date: Mar 11, 2011
- * Time: 3:20:44 PM
+ * @author mtutaj
+ * @since Mar 11, 2011
  */
 public class Manager {
 
-    Logger log = Logger.getLogger("detail");
     DAO dao;
     private String version;
 
@@ -27,11 +23,10 @@ public class Manager {
         DefaultListableBeanFactory bf = new DefaultListableBeanFactory();
         new XmlBeanDefinitionReader(bf).loadBeanDefinitions(new FileSystemResource("properties/AppConfigure.xml"));
         Manager manager = (Manager) (bf.getBean("manager"));
-        manager.log.info(manager.getVersion());
 
         String usageMsg = "Please specify a module (or modules) and optionally species: [-qtls | -strains] [-rat | -mouse | -human]";
         if( args.length<1 ) {
-            manager.log.info(usageMsg);
+            System.out.println(usageMsg);
             return;
         }
         String beanId = null;
@@ -65,8 +60,8 @@ public class Manager {
                 case "-test_email":
                     String mailServer = "localhost";
                     String[] recipients = new String[]{"mtutaj@mcw.edu"};
-                    String mailFrom = "rgddata@kirwan.mcw.edu";
-                    Utils.sendMail(mailServer, mailFrom, recipients, "TEST", "A message from kirwan");
+                    String mailFrom = "rgddata@travis.mcw.edu";
+                    Utils.sendMail(mailServer, mailFrom, recipients, "TEST", "A message from travis");
                     return;
             }
         }
@@ -74,12 +69,18 @@ public class Manager {
         BaseMapper mapper = (BaseMapper) bf.getBean(beanId);
         mapper.setDao(manager.getDao());
         mapper.setParams(params);
-        if( speciesType==SpeciesType.ALL ) {
-            mapper.run(SpeciesType.RAT);
-            mapper.run(SpeciesType.MOUSE);
-            mapper.run(SpeciesType.HUMAN);
-        } else {
-            mapper.run(speciesType);
+        try {
+            mapper.log.info(manager.getVersion());
+            if (speciesType == SpeciesType.ALL) {
+                mapper.start(SpeciesType.RAT);
+                mapper.start(SpeciesType.MOUSE);
+                mapper.start(SpeciesType.HUMAN);
+            } else {
+                mapper.start(speciesType);
+            }
+        } catch(Exception e) {
+            Utils.printStackTrace(e, mapper.log);
+            throw new Exception(e);
         }
     }
 

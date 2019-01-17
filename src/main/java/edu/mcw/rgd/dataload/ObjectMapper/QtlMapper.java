@@ -18,7 +18,6 @@ import java.util.Map;
  * analyze all qtls and recalculate their positions using estimated qtl size, when possible
  */
 public class QtlMapper extends BaseMapper {
-    Logger log = Logger.getLogger("qtlMapper");
     Logger logPosChanges = Logger.getLogger("positionChanges");
     BufferedWriter outOfRegionGenesFile = null;
 
@@ -37,7 +36,6 @@ public class QtlMapper extends BaseMapper {
     private String outOfRegionGenesFileName;
 
     public void run(int speciesType) throws Exception {
-        log.info(getDao().getConnectionInfo());
 
         // check if we should run out-of-region-genes reporter
         if( getParams().containsKey("reportOutOfRegionGenes") ) {
@@ -61,7 +59,6 @@ public class QtlMapper extends BaseMapper {
             outOfRegionGenesFile.write("=====\nGENERATION FINISHED AT "+new Date()+"\n=====\n");
             outOfRegionGenesFile.close();
         }
-        log.info("QtlMapper OK!");
     }
 
     public BufferedWriter createFileForOutOfRegionGenes() throws IOException {

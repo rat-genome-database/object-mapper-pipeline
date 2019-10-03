@@ -9,22 +9,21 @@ import java.util.List;
 
 
 /**
- * analyze rat DB_SNP sslps and recompute their positions for RGSC 3.4, Rnor5.0 and Rnor6.0 assemblies
+ * analyze rat DB_SNP markers and recompute their positions for RGSC 3.4, Rnor5.0 and Rnor6.0 assemblies
  */
-public class SslpMapper extends BaseMapper {
+public class MarkerMapper extends BaseMapper {
 
     public void run(int speciesType) throws Exception {
 
         // only rat is supported
-        if( speciesType!= SpeciesType.RAT ) {
-            String msg = "SslpMapper can only run for rat! You tried to run it for "+SpeciesType.getCommonName(speciesType);
+        if( speciesType != SpeciesType.RAT ) {
+            String msg = "MarkerMapper can only run for rat! You tried to run it for "+SpeciesType.getCommonName(speciesType);
             log.error(msg);
             return;
         }
 
-        // get list of all strains for given species
         List<SSLP> sslps = dao.getActiveSSLPsForDbSnp(speciesType);
-        log.info("number of active DB_SNP sslps: "+sslps.size());
+        log.info("number of active DB_SNP markers: "+sslps.size());
 
         // run processing for every map key specified in property file
         for( Integer mapKey: getMapKeysForSpecies(speciesType) ) {
@@ -61,13 +60,13 @@ public class SslpMapper extends BaseMapper {
 
         // display statistics
         if( matchingMapPositions>0 ) {
-            log.info("map_key="+mapKey+": matching db_snp sslp map positions: "+matchingMapPositions);
+            log.info("map_key="+mapKey+": matching db_snp marker map positions: "+matchingMapPositions);
         }
         if( insertedMapPositions>0 ) {
-            log.info("map_key="+mapKey+": inserted db_snp sslp map positions: "+insertedMapPositions);
+            log.info("map_key="+mapKey+": inserted db_snp marker map positions: "+insertedMapPositions);
         }
         if( deletedMapPositions>0 ) {
-            log.info("map_key="+mapKey+": deleted db_snp sslp map positions: "+deletedMapPositions);
+            log.info("map_key="+mapKey+": deleted db_snp marker map positions: "+deletedMapPositions);
         }
     }
 

@@ -24,7 +24,7 @@ public class Manager {
         new XmlBeanDefinitionReader(bf).loadBeanDefinitions(new FileSystemResource("properties/AppConfigure.xml"));
         Manager manager = (Manager) (bf.getBean("manager"));
 
-        String usageMsg = "Please specify a module (or modules) and optionally species: [-qtls | -strains] [-rat | -mouse | -human]";
+        String usageMsg = "Please specify a module (or modules) and optionally species: [-qtls | -strains | -markers] [-rat | -mouse | -human]";
         if( args.length<1 ) {
             System.out.println(usageMsg);
             return;
@@ -42,8 +42,8 @@ public class Manager {
                 case "-qtls":
                     beanId = "qtlMapper";
                     break;
-                case "-sslps":
-                    beanId = "sslpMapper";
+                case "-markers":
+                    beanId = "markerMapper";
                     break;
                 case "-rat":
                     speciesType = SpeciesType.RAT;

@@ -6,5 +6,5 @@ if [ "$SERVER" = "REED" ]; then
   EMAIL_LIST=mtutaj@mcw.edu,sjwang@mcw.edu,jrsmith@mcw.edu
 fi
 
-$APPHOME/run.sh -sslps -rat
-mailx -s "[$SERVER] SSLP Mapper report" $EMAIL_LIST < $APPHOME/logs/sslp_mapper.log
+$APPHOME/_run.sh -markers -rat
+mailx -s "[$SERVER] Marker Mapper report" $EMAIL_LIST < $APPHOME/logs/marker_mapper.log

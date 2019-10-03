@@ -6,6 +6,6 @@ if [ "$SERVER" = "REED" ]; then
   EMAIL_LIST=mtutaj@mcw.edu,sjwang@mcw.edu,jrsmith@mcw.edu
 fi
 
-$APPHOME/run.sh -qtls
+$APPHOME/_run.sh -qtls
 mailx -s "[$SERVER] QTL Mapper report" $EMAIL_LIST < $APPHOME/logs/qtl_mapper.log
 #mailx -s "[$SERVER] QTL Mapper position changes" $EMAIL_LIST < $APPHOME/logs/position_changes.log

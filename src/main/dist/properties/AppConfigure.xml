@@ -2,7 +2,7 @@
 
 <beans>
 	<bean id="manager" class="edu.mcw.rgd.dataload.ObjectMapper.Manager">
-        <property name="version" value="=== ObjectMapper v. 2.0.4 (Jan 17, 2019) ===" />
+        <property name="version" value="ObjectMapper   -- build 2019-10-03" />
         <property name="dao" ref="dao" />
 	</bean>
 
@@ -44,9 +44,9 @@
         </property>
     </bean>
 
-    <bean id="sslpMapper" class="edu.mcw.rgd.dataload.ObjectMapper.SslpMapper" >
-        <property name="version" value="SslpMapper v. 1.0.3 (Jan 17, 2019)" />
-        <property name="logName" value="sslpMapper" />
+    <bean id="markerMapper" class="edu.mcw.rgd.dataload.ObjectMapper.MarkerMapper" >
+        <property name="version" value="MarkerMapper   -- build 2019-10-03" />
+        <property name="logName" value="markerMapper" />
         <property name="srcPipeline" value="RGD_MAPPER_PIPELINE" />
         <property name="mapKeys">
             <map><!-- map keys for maps processed by pipeline -->

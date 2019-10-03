@@ -8,5 +8,5 @@ if [ "$SERVER" = "REED" ]; then
 fi
 
 TODAY=`date +"%Y-%m-%d"`
-$APPHOME/run.sh -qtls -reportOutOfRegionGenes
+$APPHOME/_run.sh -qtls -reportOutOfRegionGenes
 mailx -s "[$SERVER] QTL Mapper out-of-region genes" $EMAIL_LIST < $APPHOME/data/qtlsWithOutOfRegionGenes_${TODAY}.txt

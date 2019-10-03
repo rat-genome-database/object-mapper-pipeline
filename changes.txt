@@ -1,3 +1,6 @@
+Oct 03, 2019
+  renamed sslpMapper to markerMapper
+
 Jan 17, 2019 -- ver 2.0.4
   refactored build.gradle; improved logging
 

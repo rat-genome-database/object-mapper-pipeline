@@ -2,7 +2,7 @@
 
 <beans>
 	<bean id="manager" class="edu.mcw.rgd.dataload.ObjectMapper.Manager">
-        <property name="version" value="ObjectMapper   -- build 2019-10-03" />
+        <property name="version" value="ObjectMapper   -- build 2019-11-11" />
         <property name="dao" ref="dao" />
 	</bean>
 

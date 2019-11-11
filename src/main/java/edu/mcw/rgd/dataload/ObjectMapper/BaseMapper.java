@@ -2,10 +2,10 @@ package edu.mcw.rgd.dataload.ObjectMapper;
 
 import edu.mcw.rgd.datamodel.MapData;
 import edu.mcw.rgd.datamodel.SpeciesType;
-import edu.mcw.rgd.datamodel.Strain;
 import edu.mcw.rgd.process.Utils;
 import org.apache.log4j.Logger;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -25,8 +25,11 @@ public abstract class BaseMapper {
 
     public void start(int speciesType) throws Exception {
         long time0 = System.currentTimeMillis();
-        log.info(getVersion());
-        log.info(getDao().getConnectionInfo());
+        log.info("   "+getVersion());
+        log.info("   "+getDao().getConnectionInfo());
+
+        SimpleDateFormat sdt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        log.info("   started at "+sdt.format(new Date()));
 
         run(speciesType);
 

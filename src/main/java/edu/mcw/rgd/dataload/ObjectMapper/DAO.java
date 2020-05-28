@@ -1,6 +1,7 @@
 package edu.mcw.rgd.dataload.ObjectMapper;
 
 import edu.mcw.rgd.dao.impl.*;
+import edu.mcw.rgd.dao.spring.IntStringMapQuery;
 import edu.mcw.rgd.datamodel.*;
 import edu.mcw.rgd.process.Utils;
 import org.apache.log4j.Logger;
@@ -193,9 +194,16 @@ public class DAO  {
      * @throws Exception when something really bad happens
      */
     public List<MapData> getDbSnpPositions(String rsId, int mapKey, int rgdId) throws Exception {
-        List<MapData> results = mapDAO.getDbSnpPositions(rsId, mapKey);
-        for( MapData md: results ) {
+        List<IntStringMapQuery.MapPair> posList = mapDAO.getDbSnpPositions(rsId, mapKey);
+        List<MapData> results = new ArrayList<>(posList.size());
+        for( IntStringMapQuery.MapPair pair: posList ) {
+            MapData md = new MapData();
+            md.setStartPos(pair.keyValue);
+            md.setStopPos(pair.keyValue);
+            md.setChromosome(pair.stringValue);
             md.setRgdId(rgdId);
+            md.setMapKey(mapKey);
+            results.add(md);
         }
         return results;
     }

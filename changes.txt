@@ -1,3 +1,6 @@
+May 28, 2020
+  updated jar dependencies to fix problem with sql queries
+
 May 10, 2020
   updated jar dependencies
 

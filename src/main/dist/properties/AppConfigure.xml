@@ -45,7 +45,7 @@
     </bean>
 
     <bean id="markerMapper" class="edu.mcw.rgd.dataload.ObjectMapper.MarkerMapper" >
-        <property name="version" value="MarkerMapper   -- build 2019-10-03" />
+        <property name="version" value="MarkerMapper   -- build 2020-07-24" />
         <property name="logName" value="markerMapper" />
         <property name="srcPipeline" value="RGD_MAPPER_PIPELINE" />
         <property name="mapKeys">

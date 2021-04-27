@@ -2,17 +2,18 @@
 
 <beans>
 	<bean id="manager" class="edu.mcw.rgd.dataload.ObjectMapper.Manager">
-        <property name="version" value="ObjectMapper   -- build May 28, 2020" />
+        <property name="version" value="ObjectMapper   -- build 2021-04-27" />
         <property name="dao" ref="dao" />
 	</bean>
 
     <bean id="qtlMapper" class="edu.mcw.rgd.dataload.ObjectMapper.QtlMapper" >
-        <property name="version" value="QtlMapper v. 1.2.8 (Jan 17, 2019)" />
+        <property name="version" value="QtlMapper  -- build 2021-04-27" />
         <property name="logName" value="qtlMapper" />
         <property name="srcPipeline" value="RGD_MAPPER_PIPELINE" />
         <property name="outOfRegionGenesFileName" value="data/qtlsWithOutOfRegionGenes_{DATE}.txt" />
         <property name="mapKeys">
             <map><!-- map keys for maps processed by pipeline -->
+                <entry key="372" value="rat"/>
                 <entry key="360" value="rat"/>
                 <entry key="70" value="rat"/>
                 <entry key="60" value="rat"/>
@@ -32,11 +33,12 @@
     </bean>
 
     <bean id="strainMapper" class="edu.mcw.rgd.dataload.ObjectMapper.StrainMapper" >
-        <property name="version" value="StrainMapper v. 1.2.5 (Jan 17, 2019)" />
+        <property name="version" value="StrainMapper  -- build 2021-04-27" />
         <property name="logName" value="strainMapper" />
         <property name="srcPipeline" value="RGD_MAPPER_PIPELINE" />
         <property name="mapKeys">
             <map><!-- map keys for maps processed by pipeline -->
+                <entry key="372" value="rat"/>
                 <entry key="360" value="rat"/>
                 <entry key="70" value="rat"/>
                 <entry key="60" value="rat"/>
@@ -45,11 +47,12 @@
     </bean>
 
     <bean id="markerMapper" class="edu.mcw.rgd.dataload.ObjectMapper.MarkerMapper" >
-        <property name="version" value="MarkerMapper   -- build 2020-07-24" />
+        <property name="version" value="MarkerMapper   -- build 2021-04-27" />
         <property name="logName" value="markerMapper" />
         <property name="srcPipeline" value="RGD_MAPPER_PIPELINE" />
         <property name="mapKeys">
             <map><!-- map keys for maps processed by pipeline -->
+                <entry key="372" value="rat"/>
                 <entry key="360" value="rat"/>
                 <entry key="70" value="rat"/>
                 <entry key="60" value="rat"/>

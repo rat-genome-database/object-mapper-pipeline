@@ -3,7 +3,8 @@ package edu.mcw.rgd.dataload.ObjectMapper;
 import edu.mcw.rgd.datamodel.MapData;
 import edu.mcw.rgd.datamodel.SpeciesType;
 import edu.mcw.rgd.process.Utils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -146,7 +147,7 @@ public abstract class BaseMapper {
     public void setLogName(String logName) {
         this.logName = logName;
 
-        log = Logger.getLogger(logName);
+        log = LogManager.getLogger(logName);
     }
 
     public void setSrcPipeline(String srcPipeline) {

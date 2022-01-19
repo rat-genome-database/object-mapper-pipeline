@@ -4,7 +4,8 @@ import edu.mcw.rgd.dao.impl.*;
 import edu.mcw.rgd.dao.spring.IntStringMapQuery;
 import edu.mcw.rgd.datamodel.*;
 import edu.mcw.rgd.process.Utils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
@@ -15,7 +16,7 @@ import java.util.*;
  */
 public class DAO  {
 
-    Logger logPos = Logger.getLogger("positionChanges");
+    Logger logPos = LogManager.getLogger("position_changes");
 
     AssociationDAO assocDAO = new AssociationDAO();
     MapDAO mapDAO = new MapDAO();

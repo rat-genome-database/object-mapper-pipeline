@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <!-- <PatternLayout pattern="%d{HH:mm:ss} [%t] %-5level %logger{36} - %msg%n"/> -->
+            <PatternLayout pattern="[%d{yyyy-MM-hh HH:mm:ss}] %msg%n"/>
+        </Console>
+
+        <RollingFile name="status" append="true" fileName="logs/status.log" filePattern="logs/status.log.%d{yyyy-MM}">
+            <PatternLayout pattern="%d %p [%c] - %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+            </Policies>
+        </RollingFile>
+        <File name="summary" append="false" fileName="logs/summary.log">
+            <PatternLayout pattern="%m%n"/>
+            <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+        </File>
+
+        <RollingFile name="marker_mapper_debug" append="true" fileName="logs/marker_mapper_debug.log" filePattern="logs/marker_mapper_debug.log.%d{yyyy-MM}">
+            <PatternLayout pattern="[%d] - %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+            </Policies>
+        </RollingFile>
+        <File name="marker_mapper" append="false" fileName="logs/marker_mapper.log">
+            <PatternLayout pattern="%m%n"/>
+            <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+        </File>
+
+        <RollingFile name="strain_mapper_debug" append="true" fileName="logs/strain_mapper_debug.log" filePattern="logs/strain_mapper_debug.log.%d{yyyy-MM}">
+            <PatternLayout pattern="[%d] - %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+            </Policies>
+        </RollingFile>
+        <File name="strain_mapper" append="false" fileName="logs/strain_mapper.log">
+            <PatternLayout pattern="%m%n"/>
+            <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+        </File>
+
+        <RollingFile name="qtl_debug" append="true" fileName="logs/qtl_debug.log" filePattern="logs/qtl_debug.log.%d{yyyy-MM}">
+            <PatternLayout pattern="[%d] - %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+            </Policies>
+        </RollingFile>
+        <File name="qtl_mapper" append="false" fileName="logs/qtl_mapper.log">
+            <PatternLayout pattern="%m%n"/>
+            <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+        </File>
+
+        <RollingFile name="position_changes" append="true" fileName="logs/position_changes.log" filePattern="logs/position_changes.log.%d{yyyy-MM}">
+            <PatternLayout pattern="[%d] - %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+            </Policies>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Root level="INFO">
+            <AppenderRef ref="Console"/>
+        </Root>
+        <!-- daily -->
+        <Logger name="status" level="info" additivity="false">
+            <AppenderRef ref="status"/>
+            <AppenderRef ref="summary"/><!-- human readable -->
+            <AppenderRef ref="Console" level="info"/>
+        </Logger>
+
+        <!-- monthly -->
+        <Logger name="marker_mapper" level="debug" additivity="false">
+            <AppenderRef ref="marker_mapper"/>
+            <AppenderRef ref="marker_mapper_debug"/>
+            <AppenderRef ref="Console" level="info"/>
+        </Logger>
+        <Logger name="strain_mapper" level="debug" additivity="false">
+            <AppenderRef ref="strain_mapper"/>
+            <AppenderRef ref="strain_mapper_debug"/>
+            <AppenderRef ref="Console" level="info"/>
+        </Logger>
+        <Logger name="qtl_mapper" level="debug" additivity="false">
+            <AppenderRef ref="qtl_mapper"/>
+            <AppenderRef ref="qtl_debug"/>
+            <AppenderRef ref="Console" level="info"/>
+        </Logger>
+
+        <Logger name="position_changes" level="debug" additivity="false">
+            <AppenderRef ref="position_changes"/>
+            <AppenderRef ref="Console" level="info"/>
+        </Logger>
+    </Loggers>
+</Configuration>

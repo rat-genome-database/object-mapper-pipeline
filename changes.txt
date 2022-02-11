@@ -1,3 +1,6 @@
+Feb 11, 2022
+  updated dbcp to major version 2
+
 Jan 19, 2022
   updated log4j to avoid zero day exploit
 

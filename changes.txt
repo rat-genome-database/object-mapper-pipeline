@@ -1,3 +1,6 @@
+Feb 15, 2022
+  renamed distro to 'object-mapper-pipeline'
+
 Feb 11, 2022
   updated dbcp to major version 2
 

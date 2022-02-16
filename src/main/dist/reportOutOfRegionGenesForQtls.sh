@@ -1,6 +1,6 @@
 # generate a report file for qtls with all out-of-region genes
 #
-APPHOME=/home/rgddata/pipelines/ObjectMapper
+APPHOME=/home/rgddata/pipelines/object-mapper-pipeline
 SERVER=`hostname -s | tr '[a-z]' '[A-Z]'`
 EMAIL_LIST=mtutaj@mcw.edu
 if [ "$SERVER" = "REED" ]; then

@@ -1,5 +1,5 @@
-# analyze rat DB_SNP markers and compute/validate their genomic positions on assemblies 3.4, 5.0 and 6.0
-APPHOME=/home/rgddata/pipelines/ObjectMapper
+# analyze rat DB_SNP markers and compute/validate their genomic positions on assemblies 3.4, 5.0, 6.0 and 7.2
+APPHOME=/home/rgddata/pipelines/object-mapper-pipeline
 SERVER=`hostname -s | tr '[a-z]' '[A-Z]'`
 EMAIL_LIST=mtutaj@mcw.edu
 if [ "$SERVER" = "REED" ]; then

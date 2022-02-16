@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# shell script to run ObjectMapper pipeline
+# shell script to run object-mapper-pipeline
 . /etc/profile
 
-APPNAME=ObjectMapper
+APPNAME="object-mapper-pipeline"
 APPDIR=/home/rgddata/pipelines/$APPNAME
 
 cd $APPDIR

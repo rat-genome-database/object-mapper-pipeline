@@ -1,5 +1,5 @@
 # analyze all strain markers and compute qtl positions for rat, mouse and human
-APPHOME=/home/rgddata/pipelines/ObjectMapper
+APPHOME=/home/rgddata/pipelines/object-mapper-pipeline
 SERVER=`hostname -s | tr '[a-z]' '[A-Z]'`
 EMAIL_LIST=mtutaj@mcw.edu
 if [ "$SERVER" = "REED" ]; then

@@ -1,4 +1,7 @@
 Feb 15, 2022
+  tuned up logging
+
+Feb 15, 2022
   renamed distro to 'object-mapper-pipeline'
 
 Feb 11, 2022

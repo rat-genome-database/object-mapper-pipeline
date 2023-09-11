@@ -1,3 +1,6 @@
+Sep 11, 2023
+  strain mapper: mutant strains having allelic variants derive their positions from positions of those allelic variants
+
 Sep 01, 2023
 Feb 22, 2023
   updated dependencies

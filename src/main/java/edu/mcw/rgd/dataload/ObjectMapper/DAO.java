@@ -22,13 +22,11 @@ public class DAO  {
     MapDAO mapDAO = new MapDAO();
     QTLDAO qtlDAO = assocDAO.getQtlDAO();
     SSLPDAO sslpdao = assocDAO.getSslpDAO();
+    StrainDAO strainDAO = assocDAO.getStrainDAO();
+    RgdVariantDAO variantDAO = new RgdVariantDAO();
 
     public String getConnectionInfo() {
         return assocDAO.getConnectionInfo();
-    }
-
-    List<Gene> getGeneAssociationsByQTL(int qtlRgdId) throws Exception {
-        return assocDAO.getGeneAssociationsByQTL(qtlRgdId);
     }
 
     /**
@@ -40,18 +38,16 @@ public class DAO  {
     public List<Strain> getActiveStrains(int speciesTypeKey) throws Exception {
 
         // get all strains
-        List<Strain> strains = assocDAO.getStrainDAO().getActiveStrains();
+        List<Strain> strains = strainDAO.getActiveStrains();
 
         // remove all strains not belonging to our species of interest
-        ListIterator<Strain> it = strains.listIterator();
-        while( it.hasNext() ) {
-            Strain strain = it.next();
-            if( strain.getSpeciesTypeKey()!=speciesTypeKey ) {
-                it.remove();
-            }
-        }
+        strains.removeIf(strain -> strain.getSpeciesTypeKey() != speciesTypeKey);
 
         return strains;
+    }
+
+    List<Gene> getGeneAssociationsByQTL(int qtlRgdId) throws Exception {
+        return assocDAO.getGeneAssociationsByQTL(qtlRgdId);
     }
 
     /**
@@ -127,6 +123,26 @@ public class DAO  {
             rgdIdsOfMarkersInRegion.add(assoc.getMarkerRgdId());
         }
         return regionMap;
+    }
+
+    public List<MapData> getAllelicVariantPositionsForStrain( int strainRgdId, int mapKey ) throws Exception {
+
+        List<Strain2MarkerAssociation> geneAlleles = assocDAO.getStrain2GeneAssociations(strainRgdId);
+        geneAlleles.removeIf(i -> !Utils.stringsAreEqual(Utils.NVL(i.getMarkerType(), "allele"), "allele"));
+        if( geneAlleles.isEmpty() ) {
+            return Collections.emptyList();
+        }
+
+        // are any of these gene alleles have phenotypic allele variants?
+        List<MapData> mds = new ArrayList<>();
+        for( Strain2MarkerAssociation a: geneAlleles ) {
+
+            List<RgdVariant> variants = variantDAO.getVariantsFromGeneRgdId(a.getMarkerRgdId());
+            for( RgdVariant v: variants ) {
+                mds.addAll( mapDAO.getMapData(v.getRgdId(), mapKey));
+            }
+        }
+        return mds;
     }
 
     /**

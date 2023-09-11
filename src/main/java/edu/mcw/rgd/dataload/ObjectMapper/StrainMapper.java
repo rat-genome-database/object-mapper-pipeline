@@ -5,9 +5,7 @@ import edu.mcw.rgd.datamodel.SpeciesType;
 import edu.mcw.rgd.datamodel.Strain;
 import edu.mcw.rgd.process.Utils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author mtutaj
@@ -26,6 +24,7 @@ public class StrainMapper extends BaseMapper {
 
         // get list of all strains for given species
         List<Strain> strains = dao.getActiveStrains(speciesType);
+        Collections.shuffle(strains);
         log.info("number of active strains: "+strains.size());
 
         // run processing for every map key specified in property file
@@ -44,37 +43,70 @@ public class StrainMapper extends BaseMapper {
         // process all strains
         for( Strain strain: strains ) {
 
+            String strainType = Utils.defaultString(strain.getStrainTypeName());
+            boolean isMutantStrain = strainType.equals("mutant")
+                    || strainType.equals("mutant_knockin")
+                    || strainType.equals("mutant_knockout");
+
             // get validated rgd ids for flanking markers
             Map<String, List<Integer>> markers;
-            String strainType = Utils.defaultString(strain.getStrainTypeName());
-            if( strainType.equals("mutant")
-                    || strainType.equals("mutant_knockin")
-                    || strainType.equals("mutant_knockout") ) {
+            if( isMutantStrain ) {
                 markers = dao.getRgdIdsForMutantStrains(strain.getRgdId());
             } else {
                 markers = dao.getRgdIdsForFlankingMarkers(strain.getRgdId());
             }
 
             // compare the map positions with existing map positions in rgd
+            //
+            int positionMethodId = 1; // by flanking markers
+            if( isMutantStrain ) {
+                positionMethodId = 7; // position from mutated gene
+            }
+
             List<MapData> strainMapPositions = dao.getMapPositions(strain.getRgdId(), mapKey);
 
+            List<MapData> allellicVariantsPositions = Collections.emptyList();
+            if( isMutantStrain ) {
+                allellicVariantsPositions = dao.getAllelicVariantPositionsForStrain(strain.getRgdId(), mapKey);
+                if( allellicVariantsPositions!=null && allellicVariantsPositions.size()>0 ) {
+                    positionMethodId = 8; // Position from associated allelic variant
+                }
+            }
+
             // no data to process?
-            if( markers.isEmpty() && strainMapPositions.isEmpty() ) {
+            if( markers.isEmpty() && strainMapPositions.isEmpty() && allellicVariantsPositions.isEmpty() ) {
                 continue;
             }
 
             // combine positions within regions
             List<MapData> incomingMapPositions = new ArrayList<>();
-            for( String region: markers.keySet() ) {
-                // process all map positions
-                List<MapData> sslpMapPositions = new ArrayList<>(2); // combined map positions
-                for( Integer markerRgdId: markers.get(region) ) {
-                    List<MapData> mapPosList = dao.getMapPositions(markerRgdId, mapKey);
-                    for( MapData md: mapPosList ) {
-                        combineMapPositions(sslpMapPositions, md, strain.getRgdId(), region);
-                    }
+            if( positionMethodId == 8 ) {
+                // for allelic variants: just use the position as-is
+                // and ensure the rgd id is correct
+                for( MapData md: allellicVariantsPositions ) {
+
+                    MapData md2 = md.clone();
+                    md2.setRgdId( strain.getRgdId() );
+                    md2.setKey(0);
+                    md2.setSrcPipeline( getSrcPipeline() );
+                    md2.setStrand(null);
+                    md2.setNotes("allelic variant RGD ID: "+md.getRgdId());
+                    md2.setMapsDataPositionMethodId(positionMethodId);
+
+                    incomingMapPositions.add(md2);
                 }
-                incomingMapPositions.addAll(sslpMapPositions);
+            } else {
+                for (String region : markers.keySet()) {
+                    // process all map positions
+                    List<MapData> sslpMapPositions = new ArrayList<>(2); // combined map positions
+                    for (Integer markerRgdId : markers.get(region)) {
+                        List<MapData> mapPosList = dao.getMapPositions(markerRgdId, mapKey);
+                        for (MapData md : mapPosList) {
+                            combineMapPositions(sslpMapPositions, md, strain.getRgdId(), region);
+                        }
+                    }
+                    incomingMapPositions.addAll(sslpMapPositions);
+                }
             }
 
             // read positions from database
@@ -84,6 +116,11 @@ public class StrainMapper extends BaseMapper {
             int matchingPositions = qcMapData(incomingMapPositions, strainMapPositions, mdsToBeInserted, mdsToBeDeleted);
 
             updateMapData(mdsToBeInserted, mdsToBeDeleted);
+
+            // ensure that inserted positions have the correct mapping method
+            for( MapData md: mdsToBeInserted ) {
+                md.setMapsDataPositionMethodId( positionMethodId);
+            }
 
             matchingMapPositions += matchingPositions;
             insertedMapPositions += mdsToBeInserted.size();

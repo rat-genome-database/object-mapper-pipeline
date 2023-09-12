@@ -1,3 +1,6 @@
+Sep 12, 2023
+  strain mapper: logic fixes
+
 Sep 11, 2023
   strain mapper: mutant strains having allelic variants derive their positions from positions of those allelic variants
 

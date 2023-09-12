@@ -67,7 +67,9 @@ public abstract class BaseMapper {
             Iterator<MapData> it = mdsInRgd.listIterator();
             while( it.hasNext() ) {
                 MapData mdInRgd = it.next();
-                if( mdInRgd.equalsByGenomicCoords(mdIncoming) ) {
+                if( mdInRgd.equalsByGenomicCoords(mdIncoming)
+                 && Utils.intsAreEqual(mdInRgd.getMapsDataPositionMethodId(), mdIncoming.getMapsDataPositionMethodId())) {
+
                     matchCount++;
                     it.remove();
                     wasMatch = true;

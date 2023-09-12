@@ -39,6 +39,7 @@ public class StrainMapper extends BaseMapper {
         int matchingMapPositions = 0;
         int deletedMapPositions = 0;
         int insertedMapPositions = 0;
+        int methodIdUpdated = 0;
 
         // process all strains
         for( Strain strain: strains ) {
@@ -102,7 +103,7 @@ public class StrainMapper extends BaseMapper {
                     for (Integer markerRgdId : markers.get(region)) {
                         List<MapData> mapPosList = dao.getMapPositions(markerRgdId, mapKey);
                         for (MapData md : mapPosList) {
-                            combineMapPositions(sslpMapPositions, md, strain.getRgdId(), region);
+                            combineMapPositions(sslpMapPositions, md, strain.getRgdId(), region, positionMethodId);
                         }
                     }
                     incomingMapPositions.addAll(sslpMapPositions);
@@ -113,14 +114,17 @@ public class StrainMapper extends BaseMapper {
             List<MapData> mdsToBeInserted = new ArrayList<>();
             List<MapData> mdsToBeDeleted = new ArrayList<>();
 
+            // ensure that incoming positions have the correct mapping method
+            for( MapData md: incomingMapPositions ) {
+                if( !Utils.intsAreEqual(md.getMapsDataPositionMethodId(), positionMethodId) ) {
+                    md.setMapsDataPositionMethodId(positionMethodId);
+                    methodIdUpdated++;
+                }
+            }
+
             int matchingPositions = qcMapData(incomingMapPositions, strainMapPositions, mdsToBeInserted, mdsToBeDeleted);
 
             updateMapData(mdsToBeInserted, mdsToBeDeleted);
-
-            // ensure that inserted positions have the correct mapping method
-            for( MapData md: mdsToBeInserted ) {
-                md.setMapsDataPositionMethodId( positionMethodId);
-            }
 
             matchingMapPositions += matchingPositions;
             insertedMapPositions += mdsToBeInserted.size();
@@ -137,9 +141,12 @@ public class StrainMapper extends BaseMapper {
         if( deletedMapPositions>0 ) {
             log.info("map_key="+mapKey+": deleted  strain map positions: "+deletedMapPositions);
         }
+        if( methodIdUpdated>0 ) {
+            log.warn("WARN (unexpected):   map_key="+mapKey+": method id updated: "+methodIdUpdated);
+        }
     }
 
-    void combineMapPositions(List<MapData> mds, MapData mdSslp, int strainRgdId, String region) {
+    void combineMapPositions(List<MapData> mds, MapData mdSslp, int strainRgdId, String region, int positionMethodId) {
 
         // the map position to be combined must have a chromosome and start & stop positions
         if( mdSslp.getChromosome()==null || mdSslp.getChromosome().length()==0 ||
@@ -170,7 +177,7 @@ public class StrainMapper extends BaseMapper {
         mdStrain.setChromosome(mdSslp.getChromosome());
         mdStrain.setStartPos(mdSslp.getStartPos());
         mdStrain.setStopPos(mdSslp.getStopPos());
-        mdStrain.setMapsDataPositionMethodId(1); // position by flanking markers
+        mdStrain.setMapsDataPositionMethodId(positionMethodId);
         mdStrain.setSrcPipeline(getSrcPipeline());
         mdStrain.setNotes(region);
         mds.add(mdStrain);

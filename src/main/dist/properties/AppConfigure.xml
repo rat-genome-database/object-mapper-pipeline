@@ -2,7 +2,7 @@
 
 <beans>
 	<bean id="manager" class="edu.mcw.rgd.dataload.ObjectMapper.Manager">
-        <property name="version" value="ObjectMapper   -- build Sep 11, 2023" />
+        <property name="version" value="ObjectMapper   -- build Sep 12, 2023" />
         <property name="dao" ref="dao" />
 	</bean>
 
@@ -33,7 +33,7 @@
     </bean>
 
     <bean id="strainMapper" class="edu.mcw.rgd.dataload.ObjectMapper.StrainMapper" >
-        <property name="version" value="StrainMapper  -- build Sep 11, 2023" />
+        <property name="version" value="StrainMapper  -- build Sep 12, 2023" />
         <property name="logName" value="strain_mapper" />
         <property name="srcPipeline" value="RGD_MAPPER_PIPELINE" />
         <property name="mapKeys">

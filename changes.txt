@@ -1,3 +1,6 @@
+February 21, 2024
+  qtl mapper: updating to create map data for new GWAS qtls
+
 Sep 12, 2023
   strain mapper: logic fixes
 

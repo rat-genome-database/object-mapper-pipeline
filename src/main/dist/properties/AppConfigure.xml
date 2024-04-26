@@ -19,7 +19,8 @@
                 <entry key="60" value="rat"/>
                 <entry key="35" value="mouse"/>
                 <entry key="18" value="mouse"/>
-                <entry key="17" value="human"/>
+<!--                <entry key="17" value="human"/>-->
+                <entry key="38" value="human"/>
             </map>
         </property>
 

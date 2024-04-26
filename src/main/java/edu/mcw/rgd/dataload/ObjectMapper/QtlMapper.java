@@ -1,5 +1,6 @@
 package edu.mcw.rgd.dataload.ObjectMapper;
 
+import edu.mcw.rgd.dao.impl.GWASCatalogDAO;
 import edu.mcw.rgd.datamodel.*;
 import edu.mcw.rgd.process.Utils;
 import edu.mcw.rgd.process.mapping.MapManager;
@@ -106,7 +107,12 @@ public class QtlMapper extends BaseMapper {
 
         // process active qtls for given species
         for( QTL qtl: dao.getActiveQtls(speciesType) ) {
-
+//            boolean isGwas = false;
+            int estimateSize = qtlSizeEstimate;
+            if (qtl.getSymbol().startsWith("GWAS")){
+                estimateSize = 1;
+//                isGwas = true;
+            }
             // create a new qtl record object
             QtlRecord rec = new QtlRecord();
             rec.qtl = qtl;
@@ -138,12 +144,12 @@ public class QtlMapper extends BaseMapper {
             }
 
             if( rec.qtlHasNoPosition() ) {
-                insertQtl(rec, qtlSizeEstimate, mapKey);
+                insertQtl(rec, estimateSize, mapKey);
                 insertedPositions++;
                 continue;
             }
 
-            if( rec.isQtlPositionUpToDate(qtlSizeEstimate, mapKey) ) {
+            if( rec.isQtlPositionUpToDate(estimateSize, mapKey) ) {
                 log.debug("QTL "+qtl.getSymbol()+", rgd_id="+qtl.getRgdId()+" is up to date. Position information not changed");
                 matchedPositions++;
             } else {
@@ -297,6 +303,28 @@ public class QtlMapper extends BaseMapper {
                  mdsMarkers.addAll(mdsPeak);
              }
          }
+
+         // find/check pos in db_snp table
+        if (rec.qtl.getPeakRsId()!=null){
+            mds = dao.getMapPositions(rec.qtl.getPeakRsId(),mapKey);
+            mdsPeak = combinePositions(mds);
+            if( mdsPeak!=null ) {
+                if( mdsPeak.size()==1 )
+                    rec.posPeak = mdsPeak.get(0);
+                mdsMarkers.addAll(mdsPeak);
+            }
+            else {
+                // create marker map data for qtl map data
+                // grab from dbSnp
+                //dbSnp156
+                List<MapData> peakRsMaps = dao.createMapDataWithDbSNP(rec.qtl,"dbSnp156");
+                if (peakRsMaps!=null) {
+                    if (peakRsMaps.size() == 1)
+                        rec.posPeak = peakRsMaps.get(0);
+                    mdsMarkers.addAll(peakRsMaps);
+                }
+            }
+        }
 
          // check if marker positions are same chromosomes
          if( positionsOnOneChromosome(mdsMarkers) )
@@ -529,6 +557,17 @@ public class QtlMapper extends BaseMapper {
              md.setRgdId(qtl.getRgdId());
              md.setMapKey(mapKey);
 
+             // *NEW* check if the QTL is a GWAS QTL because it has a peak rs Id
+            if (qtl.getSymbol().startsWith("GWAS"))
+            {
+                md.setMapsDataPositionMethodId(3); // POS_BY_PEAK_ONLY
+//                if (calculateFromPeakRsId(md, qtl.getRgdId()))
+                md.setStartPos(posPeak.getStartPos());
+                md.setStopPos(posPeak.getStopPos());
+                md.setChromosome(posPeak.getChromosome());
+                return md;
+            }
+
              // first try qtl with both flanking markers
              if( qtlHasFlankingMarkerPosition() ) {
                  md.setMapsDataPositionMethodId(1); // POS_BY_FLANKS
@@ -554,8 +593,8 @@ public class QtlMapper extends BaseMapper {
                      return md;
                  }
                  else {
-                     // else peak alone
-                     md.setMapsDataPositionMethodId(3); // POS_BY_PEAK_ONLY
+                     // else peak alone with adjusted size
+                     md.setMapsDataPositionMethodId(5); // POS_BY_PEAK_WITH_ADJ_SIZE
                      calculateFromPeakOnly(md, estimatedQtlSize);
                      return md;
                  }
@@ -572,6 +611,23 @@ public class QtlMapper extends BaseMapper {
              // if we get here we have a logic error
              // couldn't use any fo the positioning methods
              throw new Exception("Couldn't calculate position for QTL rgd_id="+qtl.getRgdId());
+        }
+
+        boolean calculateFromPeakRsId(MapData md, int qtlRgdId) throws Exception {
+            GWASCatalogDAO gdao = new GWASCatalogDAO();
+            GWASCatalog g = gdao.getGwasCatalogByQTLRgdId(qtlRgdId);
+            if (g == null)
+                return false;
+            try {
+                int start = Integer.parseInt(g.getPos());
+                md.setStartPos(start);
+                md.setStopPos(start + 1);
+                md.setChromosome(g.getChr());
+                return true;
+            }
+            catch (Exception e){ // gwas position is null
+                return false;
+            }
         }
 
         void calculateFromFlankAndPeak(MapData md, MapData mdFlank, MapData mdPeak) {
@@ -714,4 +770,5 @@ public class QtlMapper extends BaseMapper {
             return this.outOfRegionGenes!=null;
         }
     }
+
 }

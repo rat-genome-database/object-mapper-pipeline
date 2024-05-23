@@ -268,7 +268,7 @@ public class DAO  {
 
             c = mapDAO.getConnection();
             GWASCatalog g = gdao.getGwasCatalogByQTLRgdId(qtl.getRgdId());
-            if (g==null || g.getStrongSnpRiskallele().contains("?"))
+            if (g==null || Utils.isStringEmpty(g.getStrongSnpRiskallele()))
                 return null;
 
             PreparedStatement ps = c.prepareStatement(sql);

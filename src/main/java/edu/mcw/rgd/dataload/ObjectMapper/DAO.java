@@ -1,13 +1,19 @@
 package edu.mcw.rgd.dataload.ObjectMapper;
 
 import edu.mcw.rgd.dao.impl.*;
+import edu.mcw.rgd.dao.impl.variants.VariantDAO;
 import edu.mcw.rgd.dao.spring.IntStringMapQuery;
 import edu.mcw.rgd.datamodel.*;
+import edu.mcw.rgd.datamodel.variants.VariantMapData;
 import edu.mcw.rgd.process.Utils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.*;
+import java.util.Map;
 
 /**
  * @author mtutaj
@@ -24,6 +30,9 @@ public class DAO  {
     SSLPDAO sslpdao = assocDAO.getSslpDAO();
     StrainDAO strainDAO = assocDAO.getStrainDAO();
     RgdVariantDAO variantDAO = new RgdVariantDAO();
+
+    VariantDAO vdao = new VariantDAO();
+    GWASCatalogDAO gdao = new GWASCatalogDAO();
 
     public String getConnectionInfo() {
         return assocDAO.getConnectionInfo();
@@ -156,6 +165,10 @@ public class DAO  {
         return mapDAO.getMapData(rgdId, mapKey);
     }
 
+    public List<MapData> getMapPositions(String rsId, int mapKey) throws Exception {
+        return mapDAO.getMapData(rsId, mapKey);
+    }
+
     /**
      * delete a number of map positions from database
      * @param mds list of MapData objects
@@ -243,5 +256,65 @@ public class DAO  {
      */
     public List<SSLP> getActiveSSLPsForDbSnp(int speciesTypeKey) throws Exception {
         return sslpdao.getActiveSSLPsForDbSnp(speciesTypeKey);
+    }
+
+    public List<MapData> createMapDataWithDbSNP(QTL qtl, String dbSnpSource) throws Exception{
+        String sql = "select snp_name,chromosome, position, allele, ref_allele from db_snp where map_key=38 and source=? and snp_name=?";
+        Connection c = null;
+        ArrayList<MapData> maps = new ArrayList<>();
+
+        int rgdId = 0;
+        try{
+
+            c = mapDAO.getConnection();
+            GWASCatalog g = gdao.getGwasCatalogByQTLRgdId(qtl.getRgdId());
+            if (g==null || Utils.isStringEmpty(g.getStrongSnpRiskallele()))
+                return null;
+
+            PreparedStatement ps = c.prepareStatement(sql);
+            ps.setString(1,dbSnpSource);
+            ps.setString(2,qtl.getPeakRsId());
+            ResultSet rs = ps.executeQuery();
+            List<VariantMapData> vars = vdao.getAllVariantUnionByRsId(qtl.getPeakRsId());
+            if (vars.isEmpty())
+                return null;
+            else
+            {
+                for (VariantMapData vmd : vars){
+                    if (vmd.getVariantNucleotide().equals(g.getStrongSnpRiskallele()))
+                        rgdId = (int) vmd.getId();
+                }
+            }
+            if (rgdId==0)
+                return null;
+            while (rs.next()){
+                MapData md = new MapData();
+                md.setRgdId(rgdId);
+                md.setChromosome(rs.getString("CHROMOSOME"));
+                md.setStartPos(rs.getInt("POSITION"));
+                if (rs.getString("ALLELE")==null)
+                    continue;
+                String allele = rs.getString("ALLELE").trim();
+                md.setStopPos(md.getStartPos()+allele.length());
+                md.setNotes(rs.getString("SNP_NAME"));
+                md.setMapKey(38);
+                md.setSrcPipeline("RGD_MAPPER_PIPELINE");
+                maps.add(md);
+            }
+            Set<MapData> set = new HashSet<>(maps);
+            maps.clear();
+            maps.addAll(set);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        finally {
+            c.close();
+        }
+        if (maps.isEmpty())
+            return null;
+        else
+            insertMapPositions(maps);
+        return maps;
     }
 }

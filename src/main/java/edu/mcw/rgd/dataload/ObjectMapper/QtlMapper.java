@@ -305,7 +305,7 @@ public class QtlMapper extends BaseMapper {
          }
 
          // find/check pos in db_snp table
-        if (rec.qtl.getPeakRsId()!=null){
+        if (rec.qtl.getPeakRsId()!=null && mapKey == 38){
             mds = dao.getMapPositions(rec.qtl.getPeakRsId(),mapKey);
             mdsPeak = combinePositions(mds);
             if( mdsPeak!=null ) {

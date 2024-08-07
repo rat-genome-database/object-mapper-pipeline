@@ -104,19 +104,18 @@ public class QtlMapper extends BaseMapper {
 
         // run qtl mapper for old assembly
         this.chromosomeSizes = dao.getChromosomeSizes(mapKey);
-
+        List<QTL> qtls = dao.getActiveQtls(speciesType);
         // process active qtls for given species
-        for( QTL qtl: dao.getActiveQtls(speciesType) ) {
+        for( QTL qtl:  qtls) {
 //            boolean isGwas = false;
             int estimateSize = qtlSizeEstimate;
-            if (qtl.getSymbol().startsWith("GWAS")){
-                estimateSize = 1;
-//                isGwas = true;
-            }
             // create a new qtl record object
             QtlRecord rec = new QtlRecord();
             rec.qtl = qtl;
-
+            if (qtl.getSymbol().startsWith("GWAS")){
+                estimateSize = 1;
+                rec.isGwas = true;
+            }
             // load genomic positions for qtl and markers
             loadPositions(rec, mapKey);
             if( rec.consensusChr!=null )
@@ -305,7 +304,7 @@ public class QtlMapper extends BaseMapper {
          }
 
          // find/check pos in db_snp table
-        if (rec.qtl.getPeakRsId()!=null && mapKey == 38){
+        if (rec.qtl.getPeakRsId()!=null && rec.isGwas){
             mds = dao.getMapPositions(rec.qtl.getPeakRsId(),mapKey);
             mdsPeak = combinePositions(mds);
             if( mdsPeak!=null ) {
@@ -317,7 +316,7 @@ public class QtlMapper extends BaseMapper {
                 // create marker map data for qtl map data
                 // grab from dbSnp
                 //dbSnp156
-                List<MapData> peakRsMaps = dao.createMapDataWithDbSNP(rec.qtl,"dbSnp156");
+                List<MapData> peakRsMaps = dao.createMapDataWithDbSNP(rec.qtl,"dbSnp156", mapKey);
                 if (peakRsMaps!=null) {
                     if (peakRsMaps.size() == 1)
                         rec.posPeak = peakRsMaps.get(0);
@@ -518,6 +517,7 @@ public class QtlMapper extends BaseMapper {
         public MapData posPeak;   // genomic position for peak marker
         public String consensusChr;
         public List<Gene> outOfRegionGenes;
+        public boolean isGwas = false;
 
         // qtl has position on a map
         boolean qtlHasPosition() {
@@ -558,7 +558,7 @@ public class QtlMapper extends BaseMapper {
              md.setMapKey(mapKey);
 
              // *NEW* check if the QTL is a GWAS QTL because it has a peak rs Id
-            if (qtl.getSymbol().startsWith("GWAS"))
+            if (isGwas)
             {
                 md.setMapsDataPositionMethodId(3); // POS_BY_PEAK_ONLY
 //                if (calculateFromPeakRsId(md, qtl.getRgdId()))

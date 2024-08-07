@@ -258,22 +258,21 @@ public class DAO  {
         return sslpdao.getActiveSSLPsForDbSnp(speciesTypeKey);
     }
 
-    public List<MapData> createMapDataWithDbSNP(QTL qtl, String dbSnpSource) throws Exception{
-        String sql = "select snp_name,chromosome, position, allele, ref_allele from db_snp where map_key=38 and source=? and snp_name=?";
-        Connection c = null;
+    public List<MapData> createMapDataWithDbSNP(QTL qtl, String dbSnpSource, int mapKey) throws Exception{
+        String sql = "select snp_name,chromosome, position, allele, ref_allele from db_snp where map_key=? and source=? and snp_name=?";
         ArrayList<MapData> maps = new ArrayList<>();
 
         int rgdId = 0;
-        try{
+        try (Connection c = mapDAO.getConnection()){
 
-            c = mapDAO.getConnection();
             GWASCatalog g = gdao.getGwasCatalogByQTLRgdId(qtl.getRgdId());
             if (g==null || Utils.isStringEmpty(g.getStrongSnpRiskallele()))
                 return null;
 
             PreparedStatement ps = c.prepareStatement(sql);
-            ps.setString(1,dbSnpSource);
-            ps.setString(2,qtl.getPeakRsId());
+            ps.setInt(1,mapKey);
+            ps.setString(2,dbSnpSource);
+            ps.setString(3,qtl.getPeakRsId());
             ResultSet rs = ps.executeQuery();
             List<VariantMapData> vars = vdao.getAllVariantUnionByRsId(qtl.getPeakRsId());
             if (vars.isEmpty())
@@ -305,12 +304,7 @@ public class DAO  {
             maps.clear();
             maps.addAll(set);
         }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-        finally {
-            c.close();
-        }
+
         if (maps.isEmpty())
             return null;
         else

@@ -1,3 +1,6 @@
+July 2024
+  updating qtlMapper for GWAS and improve dbSNP get method
+
 Jun 26, 2024
   updated dependencies
 

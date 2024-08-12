@@ -36,6 +36,7 @@ public class QtlMapper extends BaseMapper {
     private int consensusChrPositions;
     private int outOfRegionGenes;
     private String outOfRegionGenesFileName;
+    private Map<Integer,String> dbSnpSource;
 
     public void run(int speciesType) throws Exception {
 
@@ -315,8 +316,7 @@ public class QtlMapper extends BaseMapper {
             else {
                 // create marker map data for qtl map data
                 // grab from dbSnp
-                //dbSnp156
-                List<MapData> peakRsMaps = dao.createMapDataWithDbSNP(rec.qtl,"dbSnp156", mapKey);
+                List<MapData> peakRsMaps = dao.createMapDataWithDbSNP(rec.qtl,dbSnpSource.get(mapKey), mapKey);
                 if (peakRsMaps!=null) {
                     if (peakRsMaps.size() == 1)
                         rec.posPeak = peakRsMaps.get(0);
@@ -506,6 +506,14 @@ public class QtlMapper extends BaseMapper {
 
     public String getOutOfRegionGenesFileName() {
         return outOfRegionGenesFileName;
+    }
+
+    public void setDbSnpSource(Map<Integer,String> dbSnpSource) {
+        this.dbSnpSource = dbSnpSource;
+    }
+
+    public Map<Integer,String> getDbSnpSource() {
+        return dbSnpSource;
     }
 
 

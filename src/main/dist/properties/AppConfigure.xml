@@ -31,6 +31,12 @@
                 <entry key="human" value="26000000"/>
             </map>
         </property>
+        <property name="dbSnpSource">
+            <map>
+                <entry key="17" value="dbSnp156"/>
+                <entry key="38" value="dbSnp156"/>
+            </map>
+        </property>
     </bean>
 
     <bean id="strainMapper" class="edu.mcw.rgd.dataload.ObjectMapper.StrainMapper" >

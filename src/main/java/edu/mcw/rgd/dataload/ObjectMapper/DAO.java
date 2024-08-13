@@ -296,7 +296,7 @@ public class DAO  {
                 String allele = rs.getString("ALLELE").trim();
                 md.setStopPos(md.getStartPos()+allele.length());
                 md.setNotes(rs.getString("SNP_NAME"));
-                md.setMapKey(38);
+                md.setMapKey(mapKey);
                 md.setSrcPipeline("RGD_MAPPER_PIPELINE");
                 maps.add(md);
             }

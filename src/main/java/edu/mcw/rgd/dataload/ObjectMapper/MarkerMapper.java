@@ -43,7 +43,7 @@ public class MarkerMapper extends BaseMapper {
 
             // compare the map positions with existing map positions in rgd
             List<MapData> sslpPositionsInRgd = dao.getMapPositions(sslp.getRgdId(), mapKey);
-            List<MapData> dbSnpPositionsInRgd = dao.getDbSnpPositions(sslp.getName(), mapKey, sslp.getRgdId());
+            List<MapData> dbSnpPositionsInRgd = dao.getVariantPositions(sslp.getName(), mapKey, sslp.getRgdId());
 
             // read positions from database
             List<MapData> mdsToBeInserted = new ArrayList<>();

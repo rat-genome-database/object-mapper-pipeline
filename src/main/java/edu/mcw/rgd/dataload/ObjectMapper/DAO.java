@@ -239,6 +239,29 @@ public class DAO  {
     }
 
     /**
+     * get positions of given variant for given assembly
+     * @param rsId variant rsId, like 'rs8143345'
+     * @param mapKey map key
+     * @param rgdId rgd id of an object to receive variant positions (marker)
+     * @return list of map positions for this variant on the specified assembly
+     * @throws Exception when something really bad happens
+     */
+    public List<MapData> getVariantPositions(String rsId, int mapKey, int rgdId) throws Exception {
+        List<IntStringMapQuery.MapPair> posList = vdao.getDistinctPosByRsIdAndMapKey(rsId, mapKey);
+        List<MapData> results = new ArrayList<>(posList.size());
+        for( IntStringMapQuery.MapPair pair: posList ) {
+            MapData md = new MapData();
+            md.setStartPos(pair.keyValue);
+            md.setStopPos(pair.keyValue);
+            md.setChromosome(pair.stringValue);
+            md.setRgdId(rgdId);
+            md.setMapKey(mapKey);
+            results.add(md);
+        }
+        return results;
+    }
+
+    /**
      * get active qtls for given species
      * @param speciesType species type
      * @return list of active qtls for given species

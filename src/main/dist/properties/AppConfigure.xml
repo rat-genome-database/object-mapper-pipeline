@@ -13,6 +13,7 @@
         <property name="outOfRegionGenesFileName" value="data/qtlsWithOutOfRegionGenes_{DATE}.txt" />
         <property name="mapKeys">
             <map><!-- map keys for maps processed by pipeline -->
+                <entry key="380" value="rat"/>
                 <entry key="372" value="rat"/>
                 <entry key="360" value="rat"/>
                 <entry key="70" value="rat"/>
@@ -59,6 +60,7 @@
         <property name="srcPipeline" value="RGD_MAPPER_PIPELINE" />
         <property name="mapKeys">
             <map><!-- map keys for maps processed by pipeline -->
+                <entry key="380" value="rat"/>
                 <entry key="372" value="rat"/>
                 <entry key="360" value="rat"/>
                 <entry key="70" value="rat"/>

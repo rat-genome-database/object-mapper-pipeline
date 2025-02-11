@@ -7,5 +7,5 @@ if [ "$SERVER" = "REED" ]; then
 fi
 
 $APPHOME/_run.sh -qtls
-mailx -s "[$SERVER] QTL Mapper report" $EMAIL_LIST < $APPHOME/logs/qtl_mapper.log
+mailx -s "[$SERVER] QTL Mapper report" $EMAIL_LIST < $APPHOME/logs/qtl_mapper_summary.log
 #mailx -s "[$SERVER] QTL Mapper position changes" $EMAIL_LIST < $APPHOME/logs/position_changes.log

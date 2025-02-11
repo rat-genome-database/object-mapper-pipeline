@@ -4,4 +4,4 @@ SERVER=`hostname -s | tr '[a-z]' '[A-Z]'`
 EMAIL_LIST=mtutaj@mcw.edu
 
 $APPHOME/_run.sh -strains -rat
-mailx -s "[$SERVER] Strain Mapper report" $EMAIL_LIST < $APPHOME/logs/strain_mapper.log
+mailx -s "[$SERVER] Strain Mapper report" $EMAIL_LIST < $APPHOME/logs/strain_mapper_summary.log

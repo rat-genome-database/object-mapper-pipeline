@@ -23,7 +23,13 @@
                 <TimeBasedTriggeringPolicy interval="1"/>
             </Policies>
         </RollingFile>
-        <File name="marker_mapper" append="false" fileName="logs/marker_mapper.log">
+        <RollingFile name="marker_mapper" append="true" fileName="logs/marker_mapper.log" filePattern="logs/marker_mapper.log.%d{yyyy-MM}">
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss}] - %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+            </Policies>
+        </RollingFile>
+        <File name="marker_mapper_summary" append="false" fileName="logs/marker_mapper_summary.log">
             <PatternLayout pattern="%m%n"/>
             <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
         </File>
@@ -34,18 +40,30 @@
                 <TimeBasedTriggeringPolicy interval="1"/>
             </Policies>
         </RollingFile>
-        <File name="strain_mapper" append="false" fileName="logs/strain_mapper.log">
-            <PatternLayout pattern="%m%n"/>
-            <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
-        </File>
-
-        <RollingFile name="qtl_debug" append="true" fileName="logs/qtl_debug.log" filePattern="logs/qtl_debug.log.%d{yyyy-MM}">
+        <RollingFile name="strain_mapper" append="true" fileName="logs/strain_mapper.log" filePattern="logs/strain_mapper.log.%d{yyyy-MM}">
             <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss}] - %m%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1"/>
             </Policies>
         </RollingFile>
-        <File name="qtl_mapper" append="false" fileName="logs/qtl_mapper.log">
+        <File name="strain_mapper_summary" append="false" fileName="logs/strain_mapper_summary.log">
+            <PatternLayout pattern="%m%n"/>
+            <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+        </File>
+
+        <RollingFile name="qtl_mapper_debug" append="true" fileName="logs/qtl_mapper_debug.log" filePattern="logs/qtl_mapper_debug.log.%d{yyyy-MM}">
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss}] - %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+            </Policies>
+        </RollingFile>
+        <RollingFile name="qtl_mapper" append="true" fileName="logs/qtl_mapper.log" filePattern="logs/qtl_mapper.log.%d{yyyy-MM}">
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss}] - %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+            </Policies>
+        </RollingFile>
+        <File name="qtl_mapper_summary" append="false" fileName="logs/qtl_mapper_summary.log">
             <PatternLayout pattern="%m%n"/>
             <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
         </File>
@@ -71,18 +89,21 @@
 
         <!-- monthly -->
         <Logger name="marker_mapper" level="debug" additivity="false">
-            <AppenderRef ref="marker_mapper"/>
+            <AppenderRef ref="marker_mapper" level="info"/>
+            <AppenderRef ref="marker_mapper_summary" level="info"/>
             <AppenderRef ref="marker_mapper_debug"/>
             <AppenderRef ref="Console" level="info"/>
         </Logger>
         <Logger name="strain_mapper" level="debug" additivity="false">
-            <AppenderRef ref="strain_mapper"/>
+            <AppenderRef ref="strain_mapper" level="info"/>
+            <AppenderRef ref="strain_mapper_summary" level="info"/>
             <AppenderRef ref="strain_mapper_debug"/>
             <AppenderRef ref="Console" level="info"/>
         </Logger>
         <Logger name="qtl_mapper" level="debug" additivity="false">
-            <AppenderRef ref="qtl_mapper"/>
-            <AppenderRef ref="qtl_debug"/>
+            <AppenderRef ref="qtl_mapper" level="info"/>
+            <AppenderRef ref="qtl_mapper_summary" level="info"/>
+            <AppenderRef ref="qtl_mapper_debug"/>
             <AppenderRef ref="Console" level="info"/>
         </Logger>
 

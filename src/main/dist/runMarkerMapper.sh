@@ -7,4 +7,4 @@ if [ "$SERVER" = "REED" ]; then
 fi
 
 $APPHOME/_run.sh -markers -rat
-mailx -s "[$SERVER] Marker Mapper report" $EMAIL_LIST < $APPHOME/logs/marker_mapper.log
+mailx -s "[$SERVER] Marker Mapper report" $EMAIL_LIST < $APPHOME/logs/marker_mapper_summary.log

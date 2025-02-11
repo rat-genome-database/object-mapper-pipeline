@@ -35,6 +35,7 @@ public abstract class BaseMapper {
         run(speciesType);
 
         log.info("OK! - elapsed "+Utils.formatElapsedTime(time0, System.currentTimeMillis()));
+        log.info("===");
     }
 
     abstract public void run(int speciesType) throws Exception;

@@ -1,3 +1,6 @@
+Feb 11, 2025
+  improved logging
+
 August 12, 2024
   added map to qtlMapper for db_snp source with newly added db_snp data for human 37
 

@@ -7,7 +7,7 @@
 	</bean>
 
     <bean id="qtlMapper" class="edu.mcw.rgd.dataload.ObjectMapper.QtlMapper" >
-        <property name="version" value="QtlMapper  -- build Feb 11, 2025" />
+        <property name="version" value="QtlMapper  -- build May 5, 2025" />
         <property name="logName" value="qtl_mapper" />
         <property name="srcPipeline" value="RGD_MAPPER_PIPELINE" />
         <property name="outOfRegionGenesFileName" value="data/qtlsWithOutOfRegionGenes_{DATE}.txt" />

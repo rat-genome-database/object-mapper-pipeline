@@ -334,4 +334,30 @@ public class DAO  {
             insertMapPositions(maps);
         return maps;
     }
+
+    public List<MapData> createMapDataWOdbSnp(QTL qtl, int mapKey) throws Exception {
+        ArrayList<MapData> maps = new ArrayList<>();
+
+        GWASCatalog g = gdao.getGwasCatalogByQTLRgdId(qtl.getRgdId());
+        if (g==null || Utils.isStringEmpty(g.getStrongSnpRiskallele()))
+            return null;
+
+        VariantMapData vmd = vdao.getVariant(g.getVariantRgdId());
+        if (vmd == null || Utils.isStringEmpty(vmd.getRsId()))
+            return null;
+
+        MapData md = new MapData();
+        md.setRgdId((int)vmd.getId());
+        md.setChromosome(vmd.getChromosome());
+        md.setStartPos((int)vmd.getStartPos());
+        md.setStopPos((int)vmd.getEndPos());
+        md.setNotes(vmd.getRsId());
+        md.setMapKey(mapKey);
+        md.setSrcPipeline("RGD_MAPPER_PIPELINE");
+        maps.add(md);
+
+        insertMapPositions(maps);
+
+        return maps;
+    }
 }

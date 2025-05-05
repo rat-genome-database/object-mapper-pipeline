@@ -1,3 +1,6 @@
+May 5, 2025
+  added new method to create map data based on variant tables for rat gwas
+
 Feb 17, 2025
   updated dependencies
 

@@ -320,9 +320,11 @@ public class QtlMapper extends BaseMapper {
                 if (mapKey == 38) {
                     peakRsMaps = dao.createMapDataWithDbSNP(rec.qtl, dbSnpSource.get(mapKey), mapKey);
                 }
-                else{ // or grab from variant tabls
+                else if (mapKey==372){ // or grab from variant tabls
                     peakRsMaps = dao.createMapDataWOdbSnp(rec.qtl, mapKey);
                 }
+                else
+                    peakRsMaps = null;
                 if (peakRsMaps != null) {
                     if (peakRsMaps.size() == 1)
                         rec.posPeak = peakRsMaps.get(0);

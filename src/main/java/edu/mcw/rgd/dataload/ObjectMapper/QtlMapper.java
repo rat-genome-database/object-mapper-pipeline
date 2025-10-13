@@ -264,6 +264,9 @@ public class QtlMapper extends BaseMapper {
          List<MapData> mdsFlank2 = null;
          List<MapData> mdsPeak = null;
          List<MapData> mdsMarkers = new ArrayList<MapData>(); // positions of all markers
+         boolean hasRGDIds = false;
+        if (rec.qtl.getFlank1RgdId()!=null || rec.qtl.getFlank2RgdId()!=null || rec.qtl.getPeakRgdId()!=null)
+            hasRGDIds = true;
 
          // flanking region 1
          if( rec.qtl.getFlank1RgdId()!=null ) {
@@ -305,7 +308,7 @@ public class QtlMapper extends BaseMapper {
          }
 
          // find/check pos in db_snp table
-        if (rec.qtl.getPeakRsId()!=null && rec.isGwas){
+        if (rec.qtl.getPeakRsId()!=null && rec.isGwas && !hasRGDIds){
             mds = dao.getMapPositions(rec.qtl.getPeakRsId(),mapKey);
             mdsPeak = combinePositions(mds);
             if( mdsPeak!=null ) {

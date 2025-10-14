@@ -303,7 +303,7 @@ public class DAO  {
             else
             {
                 for (VariantMapData vmd : vars){
-                    if (vmd.getVariantNucleotide().equals(g.getStrongSnpRiskallele()))
+                    if (Utils.stringsAreEqualIgnoreCase(vmd.getVariantNucleotide(),g.getStrongSnpRiskallele()))
                         rgdId = (int) vmd.getId();
                 }
             }

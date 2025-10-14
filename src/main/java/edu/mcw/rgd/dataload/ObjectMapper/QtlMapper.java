@@ -319,15 +319,14 @@ public class QtlMapper extends BaseMapper {
             else {
                 // create marker map data for qtl map data
                 // grab from dbSnp
-                List<MapData> peakRsMaps;
+                List<MapData> peakRsMaps = null;
                 if (mapKey == 38) {
                     peakRsMaps = dao.createMapDataWithDbSNP(rec.qtl, dbSnpSource.get(mapKey), mapKey);
                 }
-                else if (mapKey==372){ // or grab from variant tabls
+                else { // or grab from variant tables
                     peakRsMaps = dao.createMapDataWOdbSnp(rec.qtl, mapKey);
                 }
-                else
-                    peakRsMaps = null;
+
                 if (peakRsMaps != null) {
                     if (peakRsMaps.size() == 1)
                         rec.posPeak = peakRsMaps.get(0);

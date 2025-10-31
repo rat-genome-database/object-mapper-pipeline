@@ -1,3 +1,6 @@
+Oct 31, 2025
+  fixed email recipients
+
 May 5, 2025
   added new method to create map data based on variant tables for rat gwas
 

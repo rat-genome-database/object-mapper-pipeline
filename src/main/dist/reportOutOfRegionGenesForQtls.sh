@@ -4,7 +4,7 @@ APPHOME=/home/rgddata/pipelines/object-mapper-pipeline
 SERVER=`hostname -s | tr '[a-z]' '[A-Z]'`
 EMAIL_LIST=mtutaj@mcw.edu
 if [ "$SERVER" = "REED" ]; then
-  EMAIL_LIST=mtutaj@mcw.edu,sjwang@mcw.edu,jrsmith@mcw.edu
+  EMAIL_LIST="mtutaj@mcw.edu sjwang@mcw.edu jrsmith@mcw.edu"
 fi
 
 TODAY=`date +"%Y-%m-%d"`

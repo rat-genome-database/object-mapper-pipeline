@@ -71,6 +71,7 @@ public class DAO  {
         List<Strain2MarkerAssociation> strainAssocs = assocDAO.getStrain2SslpAssociations(strainRgdId);
         strainAssocs.addAll(assocDAO.getStrain2GeneAssociations(strainRgdId));
         strainAssocs.addAll(assocDAO.getStrain2StrainAssociations(strainRgdId));
+        strainAssocs.addAll(assocDAO.getStrain2VariantAssociations(strainRgdId));
 
         // remove alleles from the list (many genes are alleles)
         Iterator<Strain2MarkerAssociation> its2m = strainAssocs.iterator();
@@ -359,5 +360,17 @@ public class DAO  {
         insertMapPositions(maps);
 
         return maps;
+    }
+
+    public MapData createMapDataWVariant(int rgdId, int mapKey) throws Exception {
+        VariantMapData vmd = vdao.getVariant(rgdId,mapKey);
+        if (vmd == null)
+            return null;
+        MapData md = new MapData();
+        md.setChromosome(vmd.getChromosome());
+        md.setStartPos((int)vmd.getStartPos());
+        md.setStopPos((int)vmd.getEndPos());
+        md.setMapKey(vmd.getMapKey());
+        return md;
     }
 }

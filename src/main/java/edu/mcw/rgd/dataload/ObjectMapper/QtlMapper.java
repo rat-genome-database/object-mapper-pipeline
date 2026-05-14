@@ -264,9 +264,7 @@ public class QtlMapper extends BaseMapper {
          List<MapData> mdsFlank2 = null;
          List<MapData> mdsPeak = null;
          List<MapData> mdsMarkers = new ArrayList<MapData>(); // positions of all markers
-         boolean hasRGDIds = false;
-        if (rec.qtl.getFlank1RgdId()!=null || rec.qtl.getFlank2RgdId()!=null || rec.qtl.getPeakRgdId()!=null)
-            hasRGDIds = true;
+
 
          // flanking region 1
          if( rec.qtl.getFlank1RgdId()!=null ) {
@@ -278,6 +276,13 @@ public class QtlMapper extends BaseMapper {
                  if( mdsFlank1.size()==1 )
                     rec.posFlank1 = mdsFlank1.get(0);
                  mdsMarkers.addAll(mdsFlank1);
+             }
+             if (mdsFlank1==null){ // check variant tables
+                 MapData md = dao.createMapDataWVariant(rec.qtl.getFlank1RgdId(), mapKey);
+                 if (md != null) {
+                     mdsFlank1 = new ArrayList<>();
+                     mdsFlank1.add(md);
+                 }
              }
          }
 
@@ -292,6 +297,13 @@ public class QtlMapper extends BaseMapper {
                     rec.posFlank2 = mdsFlank2.get(0);
                  mdsMarkers.addAll(mdsFlank2);
              }
+             if (mdsFlank2==null){ // check variant tables
+                 MapData md = dao.createMapDataWVariant(rec.qtl.getFlank2RgdId(), mapKey);
+                 if (md != null) {
+                     mdsFlank2 = new ArrayList<>();
+                     mdsFlank2.add(md);
+                 }
+             }
          }
 
          // peak region
@@ -305,10 +317,17 @@ public class QtlMapper extends BaseMapper {
                     rec.posPeak = mdsPeak.get(0);
                  mdsMarkers.addAll(mdsPeak);
              }
+             if (mdsPeak==null){ // check variant tables
+                 MapData md = dao.createMapDataWVariant(rec.qtl.getPeakRgdId(), mapKey);
+                 if (md != null) {
+                     mdsPeak = new ArrayList<>();
+                     mdsPeak.add(md);
+                 }
+             }
          }
 
          // find/check pos in db_snp table
-        if (rec.qtl.getPeakRsId()!=null && rec.isGwas && !hasRGDIds){
+        if (rec.qtl.getPeakRsId()!=null && rec.isGwas && !rec.qtl.hasPeakFlankRgdID()){
             mds = dao.getMapPositions(rec.qtl.getPeakRsId(),mapKey);
             mdsPeak = combinePositions(mds);
             if( mdsPeak!=null ) {

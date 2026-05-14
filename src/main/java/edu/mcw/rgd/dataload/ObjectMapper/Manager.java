@@ -1,6 +1,7 @@
 package edu.mcw.rgd.dataload.ObjectMapper;
 
 import edu.mcw.rgd.datamodel.SpeciesType;
+import edu.mcw.rgd.process.MemoryMonitor;
 import edu.mcw.rgd.process.Utils;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
@@ -69,6 +70,10 @@ public class Manager {
         BaseMapper mapper = (BaseMapper) bf.getBean(beanId);
         mapper.setDao(manager.getDao());
         mapper.setParams(params);
+
+        MemoryMonitor memoryMonitor = new MemoryMonitor();
+        memoryMonitor.start();
+
         try {
             mapper.log.info(manager.getVersion());
             if (speciesType == SpeciesType.ALL) {
@@ -81,6 +86,9 @@ public class Manager {
         } catch(Exception e) {
             Utils.printStackTrace(e, mapper.log);
             throw new Exception(e);
+        } finally {
+            memoryMonitor.stop();
+            mapper.log.info(memoryMonitor.getSummary());
         }
     }
 

@@ -102,6 +102,11 @@ public class StrainMapper extends BaseMapper {
                     List<MapData> sslpMapPositions = new ArrayList<>(2); // combined map positions
                     for (Integer markerRgdId : markers.get(region)) {
                         List<MapData> mapPosList = dao.getMapPositions(markerRgdId, mapKey);
+                        if (mapPosList.isEmpty()){
+                            MapData md = dao.createMapDataWVariant(markerRgdId, mapKey);
+                            if (md!=null)
+                                mapPosList.add(md);
+                        }
                         for (MapData md : mapPosList) {
                             combineMapPositions(sslpMapPositions, md, strain.getRgdId(), region, positionMethodId);
                         }
